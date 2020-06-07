@@ -3,7 +3,7 @@
 
 ### Feature List
 
-- Users
+- Users=
 
   - Auth0
   - Login/Logout
@@ -50,11 +50,16 @@
   - y_coord (float)
   - manager_name (string)
   - manger_phone_number (string)
+  - fss_phone_number (string)
   - sectional_chart (string)
   - name (string)
   - loc_id (string)
   - city (string)
   - state (string)
+  - elevation (integer)
+  - atc_tower (bool)
+  - ctaf (float)
+  - landing_fee (bool)
 
 - Flight Plans
   - id (primary_key)
