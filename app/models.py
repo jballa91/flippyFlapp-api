@@ -25,7 +25,7 @@ class User(db.Model):
     name = db.Column(db.String)
 
     flightPlans = db.relationship("FlightPlan", back_populates='user')
-    airplanes = db.relationship("AirPlane", back_populates='user')
+    airplanes = db.relationship("Airplane", back_populates='user')
 
     def toDict(self):
         return {
