@@ -7,7 +7,9 @@ Create Date: 2020-06-07 16:18:29.803869
 """
 from alembic import op
 import sqlalchemy as sa
-
+import json
+import os
+import sys
 
 # revision identifiers, used by Alembic.
 revision = 'ecd5ecd314d0'
@@ -79,10 +81,16 @@ def upgrade():
                     sa.PrimaryKeyConstraint('id')
                     )
 
-    import json
+    # f = open("../../test_json/test_json.txt", "r")
+    this_folder = os.path.dirname(__file__)
+    the_file = os.path.join(this_folder, '../../test_json/test_json.txt')
+    abs_path = os.path.abspath(os.path.realpath(the_file))
+    print(abs_path)
+    # print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', this_folder)
+    # rel_path = os.path.relpath(
+    #     '../../test_json/test_json.txt', this_folder)
 
-    f = open("../../test_json/test_json.txt", "r")
-
+    f = open(abs_path, 'r')
     jsonData = f.read()
     print(jsonData)
 
@@ -98,19 +106,23 @@ def upgrade():
         current_airport["y_coord"] = airport['geometry']['y']
         current_airport["name"] = airport['attributes']['Fac_Name']
         current_airport["city"] = airport['attributes']['City']
-        current_airport["State"] = airport['attributes']['State_Post_Office_Code']
+        current_airport["state"] = airport['attributes']['State_Post_Office_Code']
         current_airport["loc_id"] = airport['attributes']['Loc_Id']
         current_airport["manager_name"] = airport['attributes']['Manager_Name']
         current_airport["manager_phone_number"] = airport['attributes']['Manager_Phone']
         current_airport["fss_phone_number"] = airport['attributes']['Local_Phone_Airport_To_Fss']
         current_airport["sectional_chart"] = airport['attributes']['Sectional_Chart']
         current_airport["elevation"] = airport['attributes']['Elevation']
-        current_airport["atc_tower"] = airport['attributes']['Atc_Tower']
+        atc_tower = airport['attributes']['Atc_Tower']
+        current_airport["atc_tower"] = (
+            False, True)[atc_tower and atc_tower == 'Y']
         current_airport["ctaf"] = airport['attributes']['Ctaf']
-        current_airport["landing_fee"] = airport['attributes']['Landing_Fee']
-        airports.append(current_airport)
+        landing_fee = airport['attributes']['Landing_Fee']
+        current_airport["landing_fee"] = (
+            False, True)[landing_fee == 'Y']
+        airports_list.append(current_airport)
         i += 1
-    airports_list = read_func()
+    # airports_list = read_func()
     op.bulk_insert(airports, airports_list)
     # ### end Alembic commands ###
 
