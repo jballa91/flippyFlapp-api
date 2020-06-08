@@ -27,19 +27,38 @@ class User(db.Model):
     flightPlans = db.relationship("FlightPlan", back_populates='user')
     airplanes = db.relationship("Airplane", back_populates='user')
 
+    def toDict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'nickname': self.nickname,
+            'name': self.name
+        }
 
-class AirPlane(db.Model):
+
+class Airplane(db.Model):
     __tablename__ = 'airplanes'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     fuel_load = db.Column(db.Float)
-    fuel_comsumption = db.Column(db.Float)
+    fuel_consumption = db.Column(db.Float)
     speed = db.Column(db.Float)
     start_taxi_takeoff_fuel_use = db.Column(db.Float)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     user = db.relationship("User", back_populates="airplanes")
+
+    def toDict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'fuel_load': self.fuel_load,
+            'fuel_consumption': self.fuel_consumption,
+            'speed': self.speed,
+            'start_taxi_takeoff_fuel_use': self.start_taxi_takeoff_fuel_use,
+            'user_id': self.user_id
+        }
 
 
 class AirPort(db.Model):
