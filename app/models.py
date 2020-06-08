@@ -37,7 +37,15 @@ class User(db.Model):
     name = db.Column(db.String)
 
     flightPlans = db.relationship("FlightPlan", back_populates='user')
-    airplanes = db.relationship("AirPlane", back_populates='user')
+    airplanes = db.relationship("Airplane", back_populates='user')
+
+    def toDict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'nickname': self.nickname,
+            'name': self.name
+        }
 
     def toDict(self):
         return {
@@ -50,19 +58,29 @@ class User(db.Model):
         }
 
 
-class AirPlane(db.Model):
+class Airplane(db.Model):
     __tablename__ = 'airplanes'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     fuel_load = db.Column(db.Float)
-    flow_rate = db.Column(db.Float)
-    net_thrust = db.Column(db.Float)
-    fuel_comsumption = db.Column(db.Float)
+    fuel_consumption = db.Column(db.Float)
     speed = db.Column(db.Float)
+    start_taxi_takeoff_fuel_use = db.Column(db.Float)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     user = db.relationship("User", back_populates="airplanes")
+
+    def toDict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'fuel_load': self.fuel_load,
+            'fuel_consumption': self.fuel_consumption,
+            'speed': self.speed,
+            'start_taxi_takeoff_fuel_use': self.start_taxi_takeoff_fuel_use,
+            'user_id': self.user_id
+        }
 
 
 class AirPort(db.Model):
@@ -80,25 +98,27 @@ class AirPort(db.Model):
     fss_phone_number = db.Column(db.String(20))
     sectional_chart = db.Column(db.String(50))
     elevation = db.Column(db.Integer)
+    pattern_altitude = db.Column(db.Float)
+    fuel_types = db.Column(db.String)
     atc_tower = db.Column(db.Boolean)
     ctaf = db.Column(db.Float)
     landing_fee = db.Column(db.Boolean)
 
     def toDict(self):
         return {
-        "id": self.id,
-        "x_coord": self.x_coord,
-        "y_coord": self.y_coord,
-        'name': self.name,
-        'city': self.city,
-        'state': self.state,
-        'loc_id': self.loc_id,
-       'manager_name': self.manager_name,
-        'manager_phone_number': self.manager_phone_number,
-        'fss_phone_number': self.fss_phone_number,
-        'sectional_chart': self.sectional_chart,
-        'elevation': self.elevation,
-        'atc_tower': self.atc_tower,
-        'ctaf': self.ctaf,
-        'landing_fee': self.landing_fee
-    }
+            "id": self.id,
+            "x_coord": self.x_coord,
+            "y_coord": self.y_coord,
+            'name': self.name,
+            'city': self.city,
+            'state': self.state,
+            'loc_id': self.loc_id,
+            'manager_name': self.manager_name,
+            'manager_phone_number': self.manager_phone_number,
+            'fss_phone_number': self.fss_phone_number,
+            'sectional_chart': self.sectional_chart,
+            'elevation': self.elevation,
+            'atc_tower': self.atc_tower,
+            'ctaf': self.ctaf,
+            'landing_fee': self.landing_fee
+        }
