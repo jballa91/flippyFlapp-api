@@ -2,6 +2,7 @@
 from app.models import db
 from flask import Flask
 from flask_migrate import Migrate
+from .routes import airports
 import os
 
 # Auth0 imports
@@ -28,5 +29,6 @@ app.config.from_mapping({
     'SQLALCHEMY_TRACK_MODIFICATIONS': False,
 })
 
+app.register_blueprint(airports.bp)
 db.init_app(app)
 Migrate(app, db)

@@ -25,7 +25,7 @@ class User(db.Model):
     name = db.Column(db.String)
 
     flightPlans = db.relationship("FlightPlan", back_populates='user')
-    airplanes = db.relationship("Airplane", back_populates='user')
+    airplanes = db.relationship("AirPlane", back_populates='user')
 
     def toDict(self):
         return {
@@ -81,3 +81,22 @@ class AirPort(db.Model):
     atc_tower = db.Column(db.Boolean)
     ctaf = db.Column(db.Float)
     landing_fee = db.Column(db.Boolean)
+
+    def toDict(self):
+        return {
+        "id": self.id,
+        "x_coord": self.x_coord,
+        "y_coord": self.y_coord,
+        'name': self.name,
+        'city': self.city,
+        'state': self.state,
+        'loc_id': self.loc_id,
+       'manager_name': self.manager_name,
+        'manager_phone_number': self.manager_phone_number,
+        'fss_phone_number': self.fss_phone_number,
+        'sectional_chart': self.sectional_chart,
+        'elevation': self.elevation,
+        'atc_tower': self.atc_tower,
+        'ctaf': self.ctaf,
+        'landing_fee': self.landing_fee
+    }
