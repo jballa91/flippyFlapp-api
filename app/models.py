@@ -7,13 +7,25 @@ class FlightPlan(db.Model):
     __tablename__ = 'flight_plans'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Integer)
-    start_date = db.Column(db.Date)
-    end_date = db.Column(db.Date)
+    name = db.Column(db.String)
+    start_date = db.Column(db.DateTime(timezone=False))
+    end_date = db.Column(db.DateTime(timezone=False))
     route = db.Column(db.ARRAY(db.Integer))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     user = db.relationship("User", back_populates="flightPlans")
+
+    def toDict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'start_date': self.start_date,
+            'end_date': self.end_date,
+            'route': self.route,
+            'user_id': self.user_id,
+            'user': self.user.toDict()
+        }
+
 
 
 class User(db.Model):
@@ -26,6 +38,16 @@ class User(db.Model):
 
     flightPlans = db.relationship("FlightPlan", back_populates='user')
     airplanes = db.relationship("AirPlane", back_populates='user')
+
+    def toDict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'nickname': self.nickname,
+            'name': self.name,
+            'flightPlans': self.flightPlans.toDict(),
+            'airplanes': self.airplanes.toDict()
+        }
 
 
 class AirPlane(db.Model):

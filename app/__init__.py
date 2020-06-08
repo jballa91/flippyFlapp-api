@@ -1,7 +1,7 @@
 from app.models import db
 from flask import Flask
 from flask_migrate import Migrate
-from .routes import airports
+from .routes import airports, flight_plans
 import os
 
 app = Flask(__name__)
@@ -12,5 +12,7 @@ app.config.from_mapping({
 })
 
 app.register_blueprint(airports.bp)
+app.register_blueprint(flight_plans.bp)
+
 db.init_app(app)
 Migrate(app, db)
