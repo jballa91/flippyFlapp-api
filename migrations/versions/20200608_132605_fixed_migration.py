@@ -1,18 +1,17 @@
-"""First Migration
+"""fixed migration
 
-Revision ID: ecd5ecd314d0
+Revision ID: 6b90ff4d5430
 Revises: 
-Create Date: 2020-06-07 16:18:29.803869
+Create Date: 2020-06-08 13:26:05.740089
 
 """
 from alembic import op
 import sqlalchemy as sa
-import json
 import os
-import sys
+import json
 
 # revision identifiers, used by Alembic.
-revision = 'ecd5ecd314d0'
+revision = '6b90ff4d5430'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -44,6 +43,10 @@ def upgrade():
                                    length=50), nullable=True),
                                sa.Column('elevation', sa.Integer(),
                                          nullable=True),
+                               sa.Column('pattern_altitude',
+                                         sa.Float(), nullable=True),
+                               sa.Column('fuel_types', sa.String(),
+                                         nullable=True),
                                sa.Column('atc_tower', sa.Boolean(),
                                          nullable=True),
                                sa.Column('ctaf', sa.Float(), nullable=True),
@@ -62,10 +65,10 @@ def upgrade():
                     sa.Column('id', sa.Integer(), nullable=False),
                     sa.Column('name', sa.String(), nullable=True),
                     sa.Column('fuel_load', sa.Float(), nullable=True),
-                    sa.Column('flow_rate', sa.Float(), nullable=True),
-                    sa.Column('net_thrust', sa.Float(), nullable=True),
                     sa.Column('fuel_comsumption', sa.Float(), nullable=True),
                     sa.Column('speed', sa.Float(), nullable=True),
+                    sa.Column('start_taxi_takeoff_fuel_use',
+                              sa.Float(), nullable=True),
                     sa.Column('user_id', sa.Integer(), nullable=True),
                     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
                     sa.PrimaryKeyConstraint('id')
@@ -80,15 +83,11 @@ def upgrade():
                     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
                     sa.PrimaryKeyConstraint('id')
                     )
-
-    # f = open("../../test_json/test_json.txt", "r")
+    # ### end Alembic commands ###
     this_folder = os.path.dirname(__file__)
     the_file = os.path.join(this_folder, '../../test_json/test_json.txt')
     abs_path = os.path.abspath(os.path.realpath(the_file))
     print(abs_path)
-    # print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', this_folder)
-    # rel_path = os.path.relpath(
-    #     '../../test_json/test_json.txt', this_folder)
 
     f = open(abs_path, 'r')
     jsonData = f.read()
@@ -113,6 +112,8 @@ def upgrade():
         current_airport["fss_phone_number"] = airport['attributes']['Local_Phone_Airport_To_Fss']
         current_airport["sectional_chart"] = airport['attributes']['Sectional_Chart']
         current_airport["elevation"] = airport['attributes']['Elevation']
+        current_airport["pattern_altitude"] = airport['attributes']['Pattern_Altitude']
+        current_airport["fuel_types"] = airport['attributes']['Fuel_Types']
         atc_tower = airport['attributes']['Atc_Tower']
         current_airport["atc_tower"] = (
             False, True)[atc_tower and atc_tower == 'Y']
@@ -124,7 +125,6 @@ def upgrade():
         i += 1
     # airports_list = read_func()
     op.bulk_insert(airports, airports_list)
-    # ### end Alembic commands ###
 
 
 def downgrade():
