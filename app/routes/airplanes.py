@@ -2,14 +2,14 @@ from flask import Blueprint, jsonify, request
 from flask_cors import cross_origin
 import json
 from ..auth import requires_auth
-from ..models import Airplane
+from ..models import db, Airplane
 
 bp = Blueprint("airplanes", __name__, url_prefix="/airplanes")
 
 
 @bp.route("/<int:plane_id>")
-# @cross_origin(headers=["Content-Type", "Authorization"])
-# @requires_auth
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
 def get_airplane(plane_id):
     plane = Airplane.query.get(plane_id)
     print(plane)
@@ -18,8 +18,8 @@ def get_airplane(plane_id):
 
 
 @bp.route("", methods=["POST"])
-# @cross_origin(headers=["Content-Type", "Authorization"])
-# @requires_auth
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
 def post_airplane():
     info = request.json
     print(info)
