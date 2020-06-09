@@ -1,5 +1,5 @@
 from flask import Blueprint
-from ..models import AirPort
+from ..models import Airport
 
 bp = Blueprint("airports", __name__, url_prefix='/airports')
 
@@ -15,7 +15,7 @@ def getCoords():
 
 @bp.route('/<int:id>')
 def getAirport(id):
-    airport = AirPort.query.get(id)
+    airport = Airport.query.get(id)
 
     data = airport.toDict()
     return {"data": data}
