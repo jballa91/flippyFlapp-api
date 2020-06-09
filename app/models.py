@@ -77,6 +77,7 @@ class Airplane(db.Model):
     fuel_consumption = db.Column(db.Float)
     speed = db.Column(db.Float)
     start_taxi_takeoff_fuel_use = db.Column(db.Float)
+    fuel_type = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     user = db.relationship("User", back_populates="airplanes")
@@ -109,8 +110,8 @@ class Airport(db.Model):
     __tablename__ = 'airports'
 
     id = db.Column(db.Integer, primary_key=True)
-    x_coord = db.Column(db.Float, nullable=False)
-    y_coord = db.Column(db.Float, nullable=False)
+    lat = db.Column(db.Float, nullable=False)
+    lon = db.Column(db.Float, nullable=False)
     name = db.Column(db.String(100))
     city = db.Column(db.String(100))
     state = db.Column(db.String(5))
@@ -129,8 +130,8 @@ class Airport(db.Model):
     def toDict(self):
         return {
             "id": self.id,
-            "x_coord": self.x_coord,
-            "y_coord": self.y_coord,
+            "lat": self.lat,
+            "lon": self.lon,
             'name': self.name,
             'city': self.city,
             'state': self.state,

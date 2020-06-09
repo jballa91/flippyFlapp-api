@@ -13,8 +13,8 @@ airports = []
 for airport in parsed["features"]:
     current_airport = {}
     current_airport["id"] = i
-    current_airport["x_coord"] = airport['geometry']['x']
-    current_airport["y_coord"] = airport['geometry']['y']
+    current_airport["y_coord"] = airport['geometry']['x']
+    current_airport["x_coord"] = airport['geometry']['y']
     current_airport["name"] = airport['attributes']['Fac_Name']
     current_airport["city"] = airport['attributes']['City']
     current_airport["State"] = airport['attributes']['State_Post_Office_Code']
@@ -24,9 +24,10 @@ for airport in parsed["features"]:
     current_airport["fss_phone_number"] = airport['attributes']['Local_Phone_Airport_To_Fss']
     current_airport["sectional_chart"] = airport['attributes']['Sectional_Chart']
     current_airport["elevation"] = airport['attributes']['Elevation']
-    # pattern altitude
-    current_airport["pattern_altitude"] = airport['attributes']['']
-    current_airport["fuel_types"] = airport['attributes']['']  # fuel types
+
+    current_airport["pattern_altitude"] = airport['attributes']['Pattern_Altitude']
+
+    current_airport["fuel_types"] = airport['attributes']['Fuel_Type']
     current_airport["atc_tower"] = airport['attributes']['Atc_Tower']
     current_airport["ctaf"] = airport['attributes']['Ctaf']
     current_airport["landing_fee"] = airport['attributes']['Landing_Fee']

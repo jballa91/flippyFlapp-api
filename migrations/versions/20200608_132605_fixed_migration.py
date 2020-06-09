@@ -84,47 +84,6 @@ def upgrade():
                     sa.PrimaryKeyConstraint('id')
                     )
     # ### end Alembic commands ###
-    this_folder = os.path.dirname(__file__)
-    the_file = os.path.join(this_folder, '../../test_json/test_json.txt')
-    abs_path = os.path.abspath(os.path.realpath(the_file))
-    print(abs_path)
-
-    f = open(abs_path, 'r')
-    jsonData = f.read()
-    print(jsonData)
-
-    parsed = json.loads(jsonData)
-
-    print(parsed)
-    i = 1
-    airports_list = []
-    for airport in parsed["features"]:
-        current_airport = {}
-        current_airport["id"] = i
-        current_airport["x_coord"] = airport['geometry']['x']
-        current_airport["y_coord"] = airport['geometry']['y']
-        current_airport["name"] = airport['attributes']['Fac_Name']
-        current_airport["city"] = airport['attributes']['City']
-        current_airport["state"] = airport['attributes']['State_Post_Office_Code']
-        current_airport["loc_id"] = airport['attributes']['Loc_Id']
-        current_airport["manager_name"] = airport['attributes']['Manager_Name']
-        current_airport["manager_phone_number"] = airport['attributes']['Manager_Phone']
-        current_airport["fss_phone_number"] = airport['attributes']['Local_Phone_Airport_To_Fss']
-        current_airport["sectional_chart"] = airport['attributes']['Sectional_Chart']
-        current_airport["elevation"] = airport['attributes']['Elevation']
-        current_airport["pattern_altitude"] = airport['attributes']['Pattern_Altitude']
-        current_airport["fuel_types"] = airport['attributes']['Fuel_Types']
-        atc_tower = airport['attributes']['Atc_Tower']
-        current_airport["atc_tower"] = (
-            False, True)[atc_tower and atc_tower == 'Y']
-        current_airport["ctaf"] = airport['attributes']['Ctaf']
-        landing_fee = airport['attributes']['Landing_Fee']
-        current_airport["landing_fee"] = (
-            False, True)[landing_fee == 'Y']
-        airports_list.append(current_airport)
-        i += 1
-    # airports_list = read_func()
-    op.bulk_insert(airports, airports_list)
 
 
 def downgrade():
