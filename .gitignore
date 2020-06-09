@@ -1,3 +1,4 @@
 Pipfile.lock
 .venv
 .env
+app/bearing.py
