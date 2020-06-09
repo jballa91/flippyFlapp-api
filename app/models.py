@@ -7,13 +7,35 @@ class FlightPlan(db.Model):
     __tablename__ = 'flight_plans'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Integer)
-    start_date = db.Column(db.Date)
-    end_date = db.Column(db.Date)
+    name = db.Column(db.String)
+    start_date = db.Column(db.DateTime(timezone=False))
+    end_date = db.Column(db.DateTime(timezone=False))
     route = db.Column(db.ARRAY(db.Integer))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     user = db.relationship("User", back_populates="flightPlans")
+
+    def toDict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'start_date': self.start_date,
+            'end_date': self.end_date,
+            'route': self.route,
+            'user_id': self.user_id
+        }
+
+    def toDictJoinedLoad(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'start_date': self.start_date,
+            'end_date': self.end_date,
+            'route': self.route,
+            'user_id': self.user_id,
+            'user': self.user.toDict()
+        }
+
 
 
 class User(db.Model):
@@ -35,6 +57,16 @@ class User(db.Model):
             'name': self.name
         }
 
+    def toDictJoinedLoad(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'nickname': self.nickname,
+            'name': self.name,
+            'flightPlans': self.flightPlans.toDict(),
+            'airplanes': self.airplanes.toDict()
+        }
+
 
 class Airplane(db.Model):
     __tablename__ = 'airplanes'
@@ -49,6 +81,18 @@ class Airplane(db.Model):
 
     user = db.relationship("User", back_populates="airplanes")
 
+    def toDictJoinedLoad(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'fuel_load': self.fuel_load,
+            'fuel_consumption': self.fuel_consumption,
+            'speed': self.speed,
+            'start_taxi_takeoff_fuel_use': self.start_taxi_takeoff_fuel_use,
+            'user_id': self.user_id,
+            'user': user.toDict()
+    }
+
     def toDict(self):
         return {
             'id': self.id,
@@ -61,7 +105,7 @@ class Airplane(db.Model):
         }
 
 
-class AirPort(db.Model):
+class Airport(db.Model):
     __tablename__ = 'airports'
 
     id = db.Column(db.Integer, primary_key=True)
