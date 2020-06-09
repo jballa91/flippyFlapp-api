@@ -1,11 +1,12 @@
-from flask import request, jsonify, _request_ctx_stack
-from flask_cors import cross_origin
-from functools import wraps
-from six.moves.urllib.request import urlopen
-from jose import jwt
 import json
+from six.moves.urllib.request import urlopen
+from functools import wraps
 
-AUTH0_DOMAIN = 'www.flippy-flapp.auth0.com'
+from flask import Flask, request, jsonify, _request_ctx_stack
+from flask_cors import cross_origin
+from jose import jwt
+
+AUTH0_DOMAIN = 'flippy-flapp.auth0.com'
 API_AUDIENCE = 'https://flippy-flapp-api'
 ALGORITHMS = ["RS256"]
 
@@ -17,7 +18,8 @@ class AuthError(Exception):
 
 
 def get_token_auth_header():
-    # Obtain token from Auth Header
+    """Obtains the Access Token from the Authorization Header
+    """
     auth = request.headers.get("Authorization", None)
     if not auth:
         raise AuthError({"code": "authorization_header_missing",
@@ -45,12 +47,12 @@ def get_token_auth_header():
 
 
 def requires_auth(f):
-    # Determines if token is valid
+    """Determines if the Access Token is valid
+    """
     @wraps(f)
     def decorated(*args, **kwargs):
         token = get_token_auth_header()
-        jsonurl = urlopen(
-            "https://flippy-flap.auth0.com/.well-known/jwks.json")
+        jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
         jwks = json.loads(jsonurl.read())
         unverified_header = jwt.get_unverified_header(token)
         rsa_key = {}
@@ -75,13 +77,11 @@ def requires_auth(f):
             except jwt.ExpiredSignatureError:
                 raise AuthError({"code": "token_expired",
                                  "description": "token is expired"}, 401)
-
             except jwt.JWTClaimsError:
                 raise AuthError({"code": "invalid_claims",
                                  "description":
                                  "incorrect claims,"
                                  "please check the audience and issuer"}, 401)
-
             except Exception:
                 raise AuthError({"code": "invalid_header",
                                  "description":
