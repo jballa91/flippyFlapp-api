@@ -1,5 +1,6 @@
 from flask import Blueprint
 from ..models import Airport
+import os
 
 bp = Blueprint("airports", __name__, url_prefix='/airports')
 
@@ -16,3 +17,9 @@ def getAirport(id):
 
     data = airport.toDict()
     return {"data":data}
+
+@bp.route('/secret')
+def getKey():
+    key = os.environ.get('GOOGLE_MAP_KEY')
+
+    return {'key':key}

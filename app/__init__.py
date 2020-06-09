@@ -3,6 +3,7 @@ from app.models import db
 from flask import Flask
 from flask_migrate import Migrate
 from .routes import airports, flight_plans
+from flask_cors import CORS
 import os
 
 # Auth0 imports
@@ -11,6 +12,7 @@ from .auth import AuthError
 # Routes imports
 from .routes import airplanes
 app = Flask(__name__)
+CORS(app)
 
 app.register_blueprint(airplanes.bp)
 
