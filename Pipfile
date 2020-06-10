@@ -15,6 +15,7 @@ python-dotenv = "*"
 python-jose = "*"
 flask-cors = "*"
 six = "*"
+geographiclib = "*"
 
 [requires]
 python_version = "3.8"
