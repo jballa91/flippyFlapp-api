@@ -21,9 +21,10 @@ app.config.from_mapping({
 })
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
+app.register_blueprint(airports.bp)
 app.register_blueprint(users.bp)
 app.register_blueprint(airplanes.bp)
-
+app.register_blueprint(flight_plans.bp)
 
 @app.errorhandler(AuthError)
 def handle_auth_error(ex):
