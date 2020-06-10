@@ -17,7 +17,7 @@ lon = session.query(Airport.lon)
 airports = [{'lat': x, 'lon': y} for (x,), (y,) in zip(lat, lon)]
 
 
-def routes(departure, destination, range):
+def routes_cond(departure, destination, range):
     final_paths = []
     flight_distance = distance(departure, destination)
     # print(flight_distance)
@@ -27,7 +27,7 @@ def routes(departure, destination, range):
 
     paths = [{"distance": 0, "landings": 0, "1": departure}]
     while len(paths):
-        print('paths: ', paths)
+
         path = paths.pop(0)
         departure = path[str(len(path)-2)]
         # print(find_distance_and_bearing(
@@ -41,9 +41,7 @@ def routes(departure, destination, range):
         #                          departure, j)['s12'] * conversion <= range
         #                      and find_distance_and_bearing(departure, j)['s12'] * conversion <= find_distance_and_bearing(departure, destination)['s12'] * conversion
         #                      and find_distance_and_bearing(destination, j)['s12'] * conversion <= find_distance_and_bearing(departure, destination)['s12'] * conversion]
-        print('dest: ', find_distance_and_bearing(
-            departure, destination)['s12'] * conversion)
-        print('paths: ', paths)
+
         if find_distance_and_bearing(departure, destination)['s12'] * conversion > range:
             bearing = find_distance_and_bearing(departure, destination)['azi1']
             reference_point_lat = find_next_reference(
@@ -57,7 +55,6 @@ def routes(departure, destination, range):
 
             possible_airports = [j for j in airports if find_distance_and_bearing(
                 reference_point, j)['s12'] * conversion <= range * 0.1]
-            print(possible_airports)
 
             for i in possible_airports:
 
@@ -67,14 +64,80 @@ def routes(departure, destination, range):
 
                 new_path["distance"] += distance(departure, i)
                 new_path["landings"] += 1
-                print('new_path: ', new_path)
+
                 # if new_path[str(len(new_path)-2)] == destination:
                 #     final_paths.append(new_path)
 
                 # elif new_path["distance"] < 1.5 * flight_distance and new_path["landings"] < flight_distance / range + 1:
                 paths.append(new_path)
         else:
-            print('this')
+
+            new_path = copy.deepcopy(path)
+
+            new_path[str(len(new_path)-1)] = destination
+
+            new_path["distance"] += distance(departure, destination)
+            new_path["landings"] += 1
+            final_paths.append(new_path)
+
+    return(final_paths)
+
+
+def routes_cond(departure, destination, range):
+    final_paths = []
+    flight_distance = distance(departure, destination)
+    # print(flight_distance)
+    if flight_distance <= range:
+        final_paths = [departure, destination]
+        return final_paths
+
+    paths = [{"distance": 0, "landings": 0, "1": departure}]
+    while len(paths):
+
+        path = paths.pop(0)
+        departure = path[str(len(path)-2)]
+        # print(find_distance_and_bearing(
+        #     departure, destination)['s12'] * conversion)
+        # possible_airports = [j for j in airports if range*0.8 <= distance(departure, j) <= range and distance(departure, j) <= distance(
+        #     departure, destination) and distance(destination, j) <= distance(departure, destination)]
+
+        # possible_airports = [j for j in airports if
+        #                      range *
+        #                      0.8 <= find_distance_and_bearing(
+        #                          departure, j)['s12'] * conversion <= range
+        #                      and find_distance_and_bearing(departure, j)['s12'] * conversion <= find_distance_and_bearing(departure, destination)['s12'] * conversion
+        #                      and find_distance_and_bearing(destination, j)['s12'] * conversion <= find_distance_and_bearing(departure, destination)['s12'] * conversion]
+
+        if find_distance_and_bearing(departure, destination)['s12'] * conversion > range:
+            bearing = find_distance_and_bearing(departure, destination)['azi1']
+            reference_point_lat = find_next_reference(
+                departure, bearing, range*0.8 / conversion)['lat2']
+            reference_point_lon = find_next_reference(
+                departure, bearing, range*0.8 / conversion)['lon2']
+            reference_point = {'lat': reference_point_lat,
+                               'lon': reference_point_lon}
+            # print(reference_point)
+            # print(bearing)
+
+            possible_airports = [j for j in airports if find_distance_and_bearing(
+                reference_point, j)['s12'] * conversion <= range * 0.1]
+
+            for i in possible_airports:
+
+                new_path = copy.deepcopy(path)
+
+                new_path[str(len(new_path)-1)] = i
+
+                new_path["distance"] += distance(departure, i)
+                new_path["landings"] += 1
+
+                # if new_path[str(len(new_path)-2)] == destination:
+                #     final_paths.append(new_path)
+
+                # elif new_path["distance"] < 1.5 * flight_distance and new_path["landings"] < flight_distance / range + 1:
+                paths.append(new_path)
+        else:
+
             new_path = copy.deepcopy(path)
 
             new_path[str(len(new_path)-1)] = destination
