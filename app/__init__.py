@@ -1,10 +1,6 @@
 # Flask imports
 from flask import Flask, request, jsonify, _request_ctx_stack
 from flask_migrate import Migrate
-<<<<<<< HEAD
-from .routes import airports, flight_plans
-from flask_cors import CORS
-=======
 from .routes import airports, flight_plans, users, airplanes
 from flask_cors import cross_origin, CORS
 from .auth import *
@@ -12,7 +8,6 @@ from functools import wraps
 from six.moves.urllib.request import urlopen
 from jose import jwt
 from .models import db
->>>>>>> master
 import os
 
 # Auth0 imports
@@ -20,19 +15,16 @@ from .auth import *
 
 
 app = Flask(__name__)
-<<<<<<< HEAD
-CORS(app)
-=======
 app.config.from_mapping({
     'SQLALCHEMY_DATABASE_URI': os.environ.get('DATABASE_URL'),
     'SQLALCHEMY_TRACK_MODIFICATIONS': False,
 })
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
->>>>>>> master
 
+app.register_blueprint(airports.bp)
 app.register_blueprint(users.bp)
 app.register_blueprint(airplanes.bp)
-
+app.register_blueprint(flight_plans.bp)
 
 @app.errorhandler(AuthError)
 def handle_auth_error(ex):

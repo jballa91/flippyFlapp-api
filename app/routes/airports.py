@@ -8,7 +8,7 @@ bp = Blueprint("airports", __name__, url_prefix='/airports')
 @bp.route('/coords')
 def getCoords():
     coords = Airport.query.all()
-    data = [{'lat': coord.lat, 'lon': coord.lon,
+    data = [{'lat': coord.lat, 'lng': coord.lon,
              'id': coord.id} for coord in coords]
 
     return {"data": data}
