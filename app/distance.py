@@ -9,10 +9,11 @@ import math
 
 def distance(coordinates1, coordinates2):
 
-    lat1 = coordinates1["y"]
-    lon1 = coordinates1["x"]
-    lat2 = coordinates2["y"]
-    lon2 = coordinates2["x"]
+    lat1 = coordinates1["lat"]
+    lon1 = coordinates1["lon"]
+
+    lat2 = coordinates2["lat"]
+    lon2 = coordinates2["lon"]
 
     R = 6371e3  # metres
     φ1 = lat1 * math.pi/180  # φ, λ in radians
