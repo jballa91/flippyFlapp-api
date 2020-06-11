@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request
 from ..models import Airport
 import os
 
@@ -13,7 +13,6 @@ def getCoords():
 
     return {"data": data}
 
-
 @bp.route('/<int:id>')
 def getAirport(id):
     airport = Airport.query.get(id)
@@ -21,8 +20,11 @@ def getAirport(id):
     data = airport.toDict()
     return {"data":data}
 
-@bp.route('/secret')
-def getKey():
-    key = os.environ.get('GOOGLE_MAP_KEY')
+@bp.route('/', methods=['POST'])
+def getAirportByCoord():
+    data = request.json
 
-    return {'key':key}
+    airport = Airport.query.filter(Airport.lat == data['lat'], Airport.lon == data['lng']).one()
+
+    newData = airport.toDict()
+    return {"data": newData}
