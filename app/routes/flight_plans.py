@@ -2,11 +2,13 @@ from ..models import FlightPlan, db
 from flask import Blueprint, request
 from datetime import datetime
 from sqlalchemy.orm import joinedload
+
 from ..routescalc import routes_cond
 from ..routescalc import routes_bearing
 
 from ..range import find_range
 import json
+
 
 bp = Blueprint("flightPlans", __name__, url_prefix='/flightplans')
 
@@ -79,6 +81,7 @@ def postPathCalc():
     else:
         opt = opt_cond
     return {'route': opt}
+
 # to-do--------------------------------------------------------------
 
 
