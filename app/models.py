@@ -37,7 +37,6 @@ class FlightPlan(db.Model):
         }
 
 
-
 class User(db.Model):
     __tablename__ = 'users'
 
@@ -92,7 +91,7 @@ class Airplane(db.Model):
             'start_taxi_takeoff_fuel_use': self.start_taxi_takeoff_fuel_use,
             'user_id': self.user_id,
             'user': user.toDict()
-    }
+        }
 
     def toDict(self):
         return {
@@ -111,7 +110,7 @@ class Airport(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     lat = db.Column(db.Float, nullable=False)
-    lon = db.Column(db.Float, nullable=False)
+    lng = db.Column(db.Float, nullable=False)
     name = db.Column(db.String(100))
     city = db.Column(db.String(100))
     state = db.Column(db.String(5))
