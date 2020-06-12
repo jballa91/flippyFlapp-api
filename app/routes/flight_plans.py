@@ -2,7 +2,11 @@ from ..models import FlightPlan, db
 from flask import Blueprint, request
 from datetime import datetime
 from sqlalchemy.orm import joinedload
-from ..routes import routes_bearing, routes_cond
+from ..routescalc import routes_cond
+from ..routescalc import routes_bearing
+
+from ..range import find_range
+import json
 
 bp = Blueprint("flightPlans", __name__, url_prefix='/flightplans')
 
@@ -50,7 +54,18 @@ def postFlightPlan():
 
 @bp.route('/pathcalc', methods=['POST'])
 def postPathCalc():
-    {departure, destination, range, opt} = request.json
+    data = json.loads(request.body)
+    departure = data['startPoint']
+    destination = data['endPoint']
+    fuel_load = data['fuel_load']
+    start_taxi_takeoff_fuel_use = data['start_taxi_takeoff_fuel_use']
+    fuel_consumption = data['fuel_consumption']
+    speed = data['speed']
+    opt = data['opt']
+
+    range = find_range(fuel_load, start_taxi_takeoff_fuel_use,
+                       fuel_consumption, speed)
+
     opt_cond = routes_cond(departure, destination, range, opt)
     opt_bearing = routes_bearing(departure, destination, range, opt)
     if opt_bearing and opt_cond and opt:
@@ -67,12 +82,12 @@ def postPathCalc():
 # to-do--------------------------------------------------------------
 
 
-@bp.route('/<int:id>', methods=['PATCH'])
+@ bp.route('/<int:id>', methods=['PATCH'])
 def patchFlightPlan(id):
     pass
 
 
-@bp.route('/<int:id>')
+@ bp.route('/<int:id>')
 def getFlightPlan(id):
     flightPlan = FlightPlan.query.options(joinedload(FlightPlan.user)).get(id)
     data = flightPlan.toDictJoinedLoad()
