@@ -16,6 +16,7 @@ python-jose = "*"
 flask-cors = "*"
 six = "*"
 geographiclib = "*"
+json = "*"
 
 [requires]
 python_version = "3.8"

@@ -32,3 +32,9 @@ def post_airplane():
     db.session.add(new_plane)
     db.session.commit()
     return jsonify(new_plane.toDict(), 201)
+
+
+@ bp.route('/<int:id>')
+def getAirPlane(id):
+    airplane = Airplane.query.get(id)
+    return {'airplane': airplane}
