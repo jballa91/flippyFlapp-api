@@ -130,7 +130,7 @@ class Airport(db.Model):
         return {
             "id": self.id,
             "lat": self.lat,
-            "lon": self.lon,
+            "lon": self.lng,
             'name': self.name,
             'city': self.city,
             'state': self.state,
