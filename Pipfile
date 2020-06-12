@@ -13,10 +13,9 @@ flask-migrate = "*"
 flask = "*"
 python-dotenv = "*"
 python-jose = "*"
-flask-cors = "*"
 six = "*"
 geographiclib = "*"
-json = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.8"

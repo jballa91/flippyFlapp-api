@@ -8,7 +8,7 @@ bp = Blueprint("airports", __name__, url_prefix='/airports')
 @bp.route('/coords')
 def getCoords():
     coords = Airport.query.all()
-    data = [{'lat': coord.lat, 'lng': coord.lon,
+    data = [{'lat': coord.lat, 'lng': coord.lng,
              'id': coord.id} for coord in coords]
 
     return {"data": data}
@@ -24,7 +24,7 @@ def getAirport(id):
 def getAirportByCoord():
     data = request.json
 
-    airport = Airport.query.filter(Airport.lat == data['lat'], Airport.lon == data['lng']).one()
+    airport = Airport.query.filter(Airport.lat == data['lat'], Airport.lng == data['lng']).one()
 
     newData = airport.toDict()
     return {"data": newData}
