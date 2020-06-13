@@ -1,6 +1,5 @@
 Pipfile.lock
 .venv
 .env
-app/bearing.py
 app/routes.py
 geo_test/
