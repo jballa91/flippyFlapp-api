@@ -23,7 +23,7 @@ def routes_cond(departure, destination, range, opt, airports):
     final_paths = []
     # print(departure, destination)
     flight_distance = distance(departure, destination)
-    if flight_distance / range > 3:
+    if flight_distance / range > 2:
         return []
     if flight_distance <= range:
         final_paths = [{"distance": flight_distance,
@@ -32,7 +32,7 @@ def routes_cond(departure, destination, range, opt, airports):
 
     paths = [{"distance": 0, "landings": 0, "1": departure}]
     counter = 0
-    while len(paths) and counter < 5000:
+    while len(paths) and counter < 1000:
         counter += 1
         # print(paths)
         # print(counter)
@@ -42,7 +42,7 @@ def routes_cond(departure, destination, range, opt, airports):
 
         if distance(departure, destination) > range:
 
-            possible_airports = [j for j in airports if range*0.8 <= distance(departure, j) <= range and distance(departure, j) <= distance(
+            possible_airports = [j for j in airports if range*0.85 <= distance(departure, j) <= range and distance(departure, j) <= distance(
                 departure, destination) and distance(destination, j) <= distance(departure, destination)]
 
             # possible_airports = [j for j in airports if
@@ -146,10 +146,10 @@ def routes_bearing(departure, destination, range, opt, airports):
     return(final_paths)
 
 
-# print(routes_cond(
+# print(routes_bearing(
 #     {'lat': 33.4609444437852, 'lng': -105.53013888929719},
 #     {'lat': 38.4400000002395, 'lng': -120.88694444435187}, 450))
-    # {'lat': 41.705643055921826, 'lng': -75.28795388908138}, 450))
+# {'lat': 41.705643055921826, 'lng': -75.28795388908138}, 450))
 # {'lat': 54.144611110832585, 'lng': -165.604108332967}, 250))
-# print(routes_cond({'lng': -115.32524999993736, 'lat': 33.74772222164236},
+# print(routes_bearing({'lng': -115.32524999993736, 'lat': 33.74772222164236},
 #                      {'lng': -120.88694444435187, 'lat': 38.4400000002395}, 250))
