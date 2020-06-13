@@ -22,38 +22,40 @@ def isOverlap(start1, end1, start2,
 
 
 @bp.route('/', methods=['POST'])
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
 def postFlightPlan():
     data = request.json
-
+    print(data['route'])
     # get a users flight plans
-    userId = 1
+    userId = data['user_id']
     existingFlightPlans = FlightPlan.query.filter(
         FlightPlan.user_id == userId).all()
 
     # get dates from request object and map to datetime obj
     start_date_to_enter = datetime(data['startYear'], data['startMonth'],
-                                   data['startDay'], data['startHour'], data['startMinute'], data['startSecond'])
+                                   data['startDay'], data['startHour'], data['startMinute'], 0)
     end_date_to_enter = datetime(data['endYear'], data['endMonth'],
-                                 data['endDay'], data['endHour'], data['endMinute'], data['endSecond'])
+                                 data['endDay'], data['endHour'], data['endMinute'], 0)
 
     # makes sure dates dont overlap with existing date
     for date in existingFlightPlans:
         start = date.start_date
         end = date.end_date
         if (isOverlap(start_date_to_enter, end_date_to_enter, start, end)):
-            return f'Date entered overlaps with flight plan {date.name}'
+            return {'error': f'Date entered overlaps with flight plan {date.name}'}
         # special case if dates match exactly
         elif (start_date_to_enter == start or end_date_to_enter == end):
-            return f'Date entered matches {date.name}'
+            return {'error': f'Date entered matches {date.name}'}
         elif(start_date_to_enter >= end_date_to_enter):
-            return 'end date is before the start date'
+            return {'error': 'end date is before the start date'}
 
     flightPlan = FlightPlan(start_date=start_date_to_enter, end_date=end_date_to_enter,
                             name=data['name'], route=data['route'], user_id=data['user_id'])
     db.session.add(flightPlan)
     db.session.commit()
 
-    return 'got through'
+    return {'data': 'It Worked'}
 
 
 @bp.route('/pathcalc', methods=['POST'])
