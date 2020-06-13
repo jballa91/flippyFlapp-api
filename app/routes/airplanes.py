@@ -34,7 +34,7 @@ def post_airplane():
     return jsonify(new_plane.toDict(), 201)
 
 
-@ bp.route('/<int:id>')
+@bp.route('/<int:id>')
 def getAirPlane(id):
     airplane = Airplane.query.get(id)
     return {'airplane': airplane}

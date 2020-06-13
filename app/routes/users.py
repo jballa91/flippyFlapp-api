@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from flask_cors import cross_origin
 from ..auth import *
-from ..models import db, User
+from ..models import db, User, Airplane
 
 bp = Blueprint("users", __name__, url_prefix="/users")
 
@@ -43,3 +43,11 @@ def patch_post_user():
         db.session.add(new_user)
         db.session.commit()
         return jsonify(new_user.toDict())
+
+
+@bp.route('/<int:user_id>/airplanes')
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
+def getAirPlanes(user_id):
+    airplanes = Airplane.query.filter_by(user_id=user_id).all()
+    return jsonify([airplane.toDict() for airplane in airplanes])
