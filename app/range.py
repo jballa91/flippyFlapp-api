@@ -6,7 +6,7 @@ def find_range(fuel_load, start_taxi_takeoff_fuel_use, fuel_consumption, speed):
     usable_fuel = fuel_load - start_taxi_takeoff_fuel_use
     # start_fuel-(fuel_rate/2)
     fuel_to_endpoint = .9*usable_fuel
-    air_time = fuel_to_endpoint/fuel_rate
+    air_time = fuel_to_endpoint/fuel_consumption
     range = speed*air_time
     return range
 # Point on a line following a bearing, for a distance(range)

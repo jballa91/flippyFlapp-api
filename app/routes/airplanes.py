@@ -22,7 +22,6 @@ def get_airplane(plane_id):
 @requires_auth
 def post_airplane():
     info = request.json
-    print(info)
     new_plane = Airplane(name=info['name'],
                          fuel_load=info['fuel_load'],
                          fuel_consumption=info['fuel_consumption'],
@@ -35,7 +34,7 @@ def post_airplane():
     return jsonify(new_plane.toDict(), 201)
 
 
-@ bp.route('/<int:id>')
+@bp.route('/<int:id>')
 def getAirPlane(id):
     airplane = Airplane.query.get(id)
     return {'airplane': airplane}
