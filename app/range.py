@@ -4,6 +4,7 @@ def find_range(fuel_load, start_taxi_takeoff_fuel_use, fuel_consumption, speed):
     # fuel_rate = airplane[""]
     # speed = airplane[""]
     usable_fuel = fuel_load - start_taxi_takeoff_fuel_use
+    usable_fuel = usable_fuel - fuel_consumption/2
     # start_fuel-(fuel_rate/2)
     fuel_to_endpoint = .9*usable_fuel
     air_time = fuel_to_endpoint/fuel_consumption
