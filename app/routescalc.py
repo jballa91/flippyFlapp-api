@@ -31,7 +31,7 @@ def routes_cond(departure, destination, range, opt, airports):
 
     paths = [{"distance": 0, "landings": 0, "1": departure}]
     counter = 0
-    while len(paths):
+    while len(paths) and counter < 1000:
         counter += 1
         # print(paths)
         print(counter)
