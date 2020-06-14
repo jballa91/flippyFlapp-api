@@ -8,15 +8,15 @@ import os
 import copy
 
 conversion = 0.539957 / 1000
-# db_url = os.environ.get('DATABASE_URL')
-# engine = create_engine(db_url)
+db_url = os.environ.get('DATABASE_URL')
+engine = create_engine(db_url)
 
-# SessionFactory = sessionmaker(bind=engine)
+SessionFactory = sessionmaker(bind=engine)
 
-# session = SessionFactory()
-# lat = session.query(Airport.lat)
-# lng = session.query(Airport.lng)
-# airports = [{'lat': x, 'lng': y} for (x,), (y,) in zip(lat, lng)]
+session = SessionFactory()
+lat = session.query(Airport.lat)
+lng = session.query(Airport.lng)
+airports = [{'lat': x, 'lng': y} for (x,), (y,) in zip(lat, lng)]
 
 
 def routes_cond(departure, destination, range, opt, airports):
