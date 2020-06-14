@@ -25,10 +25,12 @@ def isOverlap(start1, end1, start2,
 @cross_origin(headers=["Content-Type", "Authorization"])
 @requires_auth
 def postFlightPlan():
+    errors = []
     data = request.json
     print(data['route'])
     # get a users flight plans
     userId = data['user_id']
+    print(data['name'])
     existingFlightPlans = FlightPlan.query.filter(
         FlightPlan.user_id == userId).all()
 
@@ -43,19 +45,25 @@ def postFlightPlan():
         start = date.start_date
         end = date.end_date
         if (isOverlap(start_date_to_enter, end_date_to_enter, start, end)):
-            return {'error': f'Date entered overlaps with flight plan {date.name}'}
+            errors.append(f'Date entered overlaps with flight plan {date.name}')
         # special case if dates match exactly
         elif (start_date_to_enter == start or end_date_to_enter == end):
-            return {'error': f'Date entered matches {date.name}'}
-        elif(start_date_to_enter >= end_date_to_enter):
-            return {'error': 'end date is before the start date'}
+            errors.append(f'Date entered matches "{date.name}"')
+    if(start_date_to_enter >= end_date_to_enter):
+        errors.append('end date is before or equal to the start date')
+    if(data['name'] == ''):
+        errors.append('Please enter a name ')
 
-    flightPlan = FlightPlan(start_date=start_date_to_enter, end_date=end_date_to_enter,
-                            name=data['name'], route=data['route'], user_id=data['user_id'])
-    db.session.add(flightPlan)
-    db.session.commit()
+    if(len(errors) == 0):
+        flightPlan = FlightPlan(start_date=start_date_to_enter, end_date=end_date_to_enter,
+                                name=data['name'], route=data['route'], user_id=data['user_id'])
+        db.session.add(flightPlan)
+        db.session.commit()
+        return {'data': 'It Worked'}
+    else:
+        return {'errors': errors}
 
-    return {'data': 'It Worked'}
+
 
 
 @bp.route('/pathcalc', methods=['POST'])
