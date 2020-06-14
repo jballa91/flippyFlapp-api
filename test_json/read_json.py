@@ -3,7 +3,6 @@ f = open("test_json.txt", "r")
 
 jsonData = f.read()
 
-
 parsed = json.loads(jsonData)
 
 i = 1

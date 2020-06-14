@@ -19,12 +19,16 @@ app.config.from_mapping({
     'SQLALCHEMY_DATABASE_URI': os.environ.get('DATABASE_URL'),
     'SQLALCHEMY_TRACK_MODIFICATIONS': False,
 })
+db.init_app(app)
+Migrate(app, db)
+
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 app.register_blueprint(airports.bp)
 app.register_blueprint(users.bp)
 app.register_blueprint(airplanes.bp)
 app.register_blueprint(flight_plans.bp)
+
 
 @app.errorhandler(AuthError)
 def handle_auth_error(ex):
@@ -47,8 +51,6 @@ def private():
     response = "Hello from a private endpoint! You need to be authenticated to see this."
     return jsonify(message=response)
 
-# This needs authorization
-
 
 @app.route("/api/private-scoped")
 @cross_origin(headers=["Content-Type", "Authorization"])
@@ -64,5 +66,3 @@ def private_scoped():
 
 
 # Don't need required scopes.
-db.init_app(app)
-Migrate(app, db)
