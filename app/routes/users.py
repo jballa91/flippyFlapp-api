@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from flask_cors import cross_origin
 from ..auth import *
-from ..models import db, User, Airplane
+from ..models import db, User, Airplane, FlightPlan
 
 bp = Blueprint("users", __name__, url_prefix="/users")
 
@@ -51,3 +51,10 @@ def patch_post_user():
 def getAirPlanes(user_id):
     airplanes = Airplane.query.filter_by(user_id=user_id).all()
     return jsonify([airplane.toDict() for airplane in airplanes])
+
+
+@bp.route('/<int:user_id>/flightplans')
+def getUsersFlightPlans(user_id):
+    existingFlightPlans = FlightPlan.query.filter(FlightPlan.user_id == user_id).all()
+
+    return {'data': [plan.toDict() for plan in existingFlightPlans]}
