@@ -1,7 +1,7 @@
 # from geo import find_distance_and_bearing, find_next_reference
-from distance import distance
-from bearing import bearing_calc, next_reference
-from models import Airport
+from .distance import distance
+from .bearing import bearing_calc, next_reference
+from .models import Airport
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, sessionmaker
 import os
@@ -19,7 +19,7 @@ lng = session.query(Airport.lng)
 airports = [{'lat': x, 'lng': y} for (x,), (y,) in zip(lat, lng)]
 
 
-def routes_cond(departure, destination, range, opt=True):
+def routes_cond(departure, destination, range, opt, airports):
     final_paths = []
     # print(departure, destination)
     flight_distance = distance(departure, destination)
@@ -80,7 +80,7 @@ def routes_cond(departure, destination, range, opt=True):
     return(final_paths)
 
 
-def routes_bearing(departure, destination, range, opt=True):
+def routes_bearing(departure, destination, range, opt, airports):
 
     final_paths = []
     # flight_distance = find_distance_and_bearing(
@@ -146,9 +146,9 @@ def routes_bearing(departure, destination, range, opt=True):
     return(final_paths)
 
 
-print(routes_bearing(
-    {'lat': 34.97875000010144, 'lng': -89.78686111097397},
-    {'lat': 28.102750000370804, 'lng': -80.64525000003371}, 450))
+# print(routes_bearing(
+#     {'lat': 34.97875000010144, 'lng': -89.78686111097397},
+#     {'lat': 28.102750000370804, 'lng': -80.64525000003371}, 450))
 # {'lat': 33.4609444437852, 'lng': -105.53013888929719},
 # {'lat': 38.4400000002395, 'lng': -120.88694444435187}, 450))
 # {'lat': 41.705643055921826, 'lng': -75.28795388908138}, 450))
