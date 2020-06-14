@@ -105,23 +105,24 @@ def postPathCalc():
     else:
         optroute = opt_cond
     optroute_list = []
-    print('this')
-    print(optroute_list)
-    # print(len(optroute))
-    print(optroute)
-    print(range(1, int(len(optroute))))
+
     for stop in range(1, (len(optroute)-1)):
-        print("stops", str(stop))
+
         optroute_list.append(optroute[str(stop)])
-    print("list", optroute_list)
+
     return {'route': optroute_list}
 
 # to-do--------------------------------------------------------------
 
 
-@ bp.route('/<int:id>', methods=['PATCH'])
+@bp.route('/<int:id>', methods=['PATCH'])
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
 def patchFlightPlan(id):
-    pass
+    data = request.json
+    flightPlan = FlightPlan.query.get(id).update(data)
+    db.session.commit()
+    return({'updated_data': flightPlan.toDictJoinedLoad()})
 
 
 @ bp.route('/<int:id>')
