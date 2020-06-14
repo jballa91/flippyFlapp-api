@@ -83,13 +83,4 @@ def next_reference(latlon, bearing, range):
     lat2 = lat2 * 180 / math.pi
     lng2 = lng2 * 180 / math.pi
 
-    # print(lat2)
-    # print(lon2)
     return ({'lat2': lat2, 'lng2': lng2})
-
-
-# print(bearing_calc({'lng': -115.32524999993736, 'lat': 33.74772222164236},
-    #    {'lng': -120.88694444435187, 'lat': 38.4400000002395}))
-# print(bearing(39.099912, -94.581213, 38.627089, -90.200203))
-# print(next_reference({'lat': 38.4400000002395, 'lng': -
-#                       120.88694444435187}, -0.7357343997365394, 250))

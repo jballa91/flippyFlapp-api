@@ -30,7 +30,6 @@ def get_user():
 @requires_auth
 def patch_post_user():
     body = request.json
-    print(body)
     user_db = User.query.filter_by(email=body["email"]).first()
     if user_db:
         user_db.nickname = body["nickname"]
@@ -55,6 +54,7 @@ def getAirPlanes(user_id):
 
 @bp.route('/<int:user_id>/flightplans')
 def getUsersFlightPlans(user_id):
-    existingFlightPlans = FlightPlan.query.filter(FlightPlan.user_id == user_id).all()
+    existingFlightPlans = FlightPlan.query.filter(
+        FlightPlan.user_id == user_id).all()
 
     return {'data': [plan.toDict() for plan in existingFlightPlans]}

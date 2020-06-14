@@ -21,7 +21,6 @@ airports = [{'lat': x, 'lng': y} for (x,), (y,) in zip(lat, lng)]
 
 def routes_cond(departure, destination, range, opt, airports):
     final_paths = []
-    # print(departure, destination)
     flight_distance = distance(departure, destination)
     if flight_distance / range > 2:
         return []
@@ -34,8 +33,6 @@ def routes_cond(departure, destination, range, opt, airports):
     counter = 0
     while len(paths) and counter < 1000:
         counter += 1
-        # print(paths)
-        # print(counter)
 
         path = paths.pop(0)
         departure = path[str(len(path)-2)]
@@ -102,20 +99,14 @@ def routes_bearing(departure, destination, range, opt, airports):
         # if find_distance_and_bearing(departure, destination)['s12'] * conversion > range:
         if distance(departure, destination) > range:
 
-            # bearing = find_distance_and_bearing(departure, destination)['azi1']
             bearing = bearing_calc(departure, destination)
-            # print(find_next_reference(
-            #     departure, bearing, range*0.8 / conversion))
             reference_point_lat = next_reference(
                 departure, bearing, range)['lat2']
             reference_point_lng = next_reference(
                 departure, bearing, range)['lng2']
             reference_point = {'lat': reference_point_lat,
                                'lng': reference_point_lng}
-            # print('this:', reference_point)
-            # possible_airports = [j for j in airports if find_distance_and_bearing(
             possible_airports = [j for j in airports if distance(
-                # reference_point, j)['s12'] * conversion <= range * 0.2]
                 reference_point, j) <= range * 0.1]
 
             for i in possible_airports:
@@ -128,7 +119,6 @@ def routes_bearing(departure, destination, range, opt, airports):
                 new_path["landings"] += 1
 
                 paths.append(new_path)
-                # print(paths)
         else:
 
             new_path = copy.deepcopy(path)
@@ -144,14 +134,3 @@ def routes_bearing(departure, destination, range, opt, airports):
         final_paths = sorted(final_paths, key=lambda k: k['landings'])[0]
 
     return(final_paths)
-
-
-# print(routes_bearing(
-#     {'lat': 34.97875000010144, 'lng': -89.78686111097397},
-#     {'lat': 28.102750000370804, 'lng': -80.64525000003371}, 450))
-# {'lat': 33.4609444437852, 'lng': -105.53013888929719},
-# {'lat': 38.4400000002395, 'lng': -120.88694444435187}, 450))
-# {'lat': 41.705643055921826, 'lng': -75.28795388908138}, 450))
-# {'lat': 54.144611110832585, 'lng': -165.604108332967}, 250))
-# print(routes_bearing({'lng': -115.32524999993736, 'lat': 33.74772222164236},
-#                      {'lng': -120.88694444435187, 'lat': 38.4400000002395}, 250))

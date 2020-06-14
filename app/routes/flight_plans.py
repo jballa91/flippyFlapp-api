@@ -27,10 +27,8 @@ def isOverlap(start1, end1, start2,
 def postFlightPlan():
     errors = []
     data = request.json
-    print(data['route'])
     # get a users flight plans
     userId = data['user_id']
-    print(data['name'])
     existingFlightPlans = FlightPlan.query.filter(
         FlightPlan.user_id == userId).all()
 
@@ -45,7 +43,8 @@ def postFlightPlan():
         start = date.start_date
         end = date.end_date
         if (isOverlap(start_date_to_enter, end_date_to_enter, start, end)):
-            errors.append(f'Date entered overlaps with flight plan {date.name}')
+            errors.append(
+                f'Date entered overlaps with flight plan {date.name}')
         # special case if dates match exactly
         elif (start_date_to_enter == start or end_date_to_enter == end):
             errors.append(f'Date entered matches "{date.name}"')
@@ -65,13 +64,11 @@ def postFlightPlan():
 
 
 
-
 @bp.route('/pathcalc', methods=['POST'])
 @cross_origin(headers=["Content-Type", "Authorization"])
 @requires_auth
 def postPathCalc():
     data = request.json
-    # print(data)
     departure = {"lat": data['startPoint']
                  ["lat"], "lng": data['startPoint']['lon']}
 

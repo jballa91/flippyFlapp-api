@@ -2,12 +2,10 @@ import json
 f = open("test_json.txt", "r")
 
 jsonData = f.read()
-# print(jsonData)
 
 
 parsed = json.loads(jsonData)
 
-# print(parsed)
 i = 1
 airports = []
 for airport in parsed["features"]:
@@ -33,6 +31,3 @@ for airport in parsed["features"]:
     current_airport["landing_fee"] = airport['attributes']['Landing_Fee']
     airports.append(current_airport)
     i += 1
-
-
-print(airports)
