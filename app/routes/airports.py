@@ -1,6 +1,8 @@
 from flask import Blueprint, request
 from ..models import Airport
+from flask_cors import cross_origin
 import os
+import json
 
 bp = Blueprint("airports", __name__, url_prefix='/airports')
 
@@ -13,18 +15,22 @@ def getCoords():
 
     return {"data": data}
 
+
 @bp.route('/<int:id>')
 def getAirport(id):
     airport = Airport.query.get(id)
 
     data = airport.toDict()
-    return {"data":data}
+    return {"data": data}
+
 
 @bp.route('/', methods=['POST'])
+@cross_origin(headers=["Content-Type"])
 def getAirportByCoord():
     data = request.json
 
-    airport = Airport.query.filter(Airport.lat == data['lat'], Airport.lng == data['lng']).one()
+    airport = Airport.query.filter(
+        Airport.lat == data['lat'], Airport.lng == data['lng']).one()
 
     newData = airport.toDict()
     return {"data": newData}
