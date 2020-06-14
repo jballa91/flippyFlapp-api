@@ -12,9 +12,7 @@ bp = Blueprint("airplanes", __name__, url_prefix="/airplanes")
 @requires_auth
 def get_airplane(plane_id):
     plane = Airplane.query.get(plane_id)
-    print(plane)
     return jsonify(plane.toDict(), 201)
-    # return {"data": plane}
 
 
 @bp.route("", methods=["POST"])
