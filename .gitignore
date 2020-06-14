@@ -1,6 +1,5 @@
 Pipfile.lock
 .venv
 .env
-app/routes.py
 geo_test/
 patchtest.py
