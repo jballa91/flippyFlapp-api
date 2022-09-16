@@ -9,7 +9,7 @@ flask==1.1.2
 geographiclib==1.50
 itsdangerous==1.1.0
 jinja2==2.11.2
-mako==1.1.3
+mako==1.2.2
 markupsafe==1.1.1
 psycopg2-binary==2.8.5
 pyasn1==0.4.8
